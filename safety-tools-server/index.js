@@ -15,12 +15,19 @@ async function run() {
     try {
         await client.connect();
         const toolsCollection = client.db('safety_tools').collection('tools');
+        const reviewCollection = client.db('safety_tools').collection('reviews');
 
         app.get('/tools', async (req, res) => {
             const query = {};
             const cursor = toolsCollection.find(query);
             const tools = await cursor.toArray();
             res.send(tools);
+        });
+        app.get('/reviews', async (req, res) => {
+            const query = {};
+            const cursor = reviewCollection.find(query);
+            const reviews = await cursor.toArray();
+            res.send(reviews);
         });
 
         // app.get('/inventory/:id', async(req, res) =>{

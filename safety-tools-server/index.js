@@ -16,6 +16,7 @@ async function run() {
         await client.connect();
         const toolsCollection = client.db('safety_tools').collection('tools');
         const reviewCollection = client.db('safety_tools').collection('reviews');
+        const purchaseCollection = client.db('safety_tools').collection('purchase');
 
         app.get('/tools', async (req, res) => {
             const query = {};
@@ -23,11 +24,69 @@ async function run() {
             const tools = await cursor.toArray();
             res.send(tools);
         });
+
+        app.get('/tools/:id', async(req, res) =>{
+            const id = req.params.id;
+            const query={_id: ObjectId(id)};
+            const tool = await toolsCollection.findOne(query);
+            res.send(tool);
+        });
+
+        // update tool
+        app.put('/tools/:id', async(req, res) =>{
+            console.log(req.body);
+            console.log(req.body.avaQuantity);
+            const id = req.params.id;
+            const updatedUser = req.body;
+            const filter = {_id: ObjectId(id)};
+            const options = { upsert: true };
+            const updatedDoc = {
+                $set: {
+                    avaQuantity: updatedUser.avaQuantity
+                }
+            };
+            const result = await toolsCollection.updateOne(filter, updatedDoc, options);
+            res.send(result);
+
+        });
+
+        // delete
+        app.delete('/tools/:id', async(req, res) =>{
+            const id = req.params.id;
+            console.log(id)
+            const query = {_id: ObjectId(id)};
+            const result = await toolsCollection.deleteOne(query);
+            res.send(result);
+        })
+
+
+        // post
+        app.post('/tools', async(req, res) =>{
+            const newTool = req.body;
+            const result = await toolsCollection.insertOne(newTool);
+            res.send(result);
+        });
+
+
+        // post
+        app.post('/purchase', async(req, res) =>{
+            const purchase = req.body;
+            const result = await purchaseCollection.insertOne(purchase);
+            res.send(result);
+        });
+
         app.get('/reviews', async (req, res) => {
             const query = {};
             const cursor = reviewCollection.find(query);
             const reviews = await cursor.toArray();
             res.send(reviews);
+        });
+
+        // post
+        app.post('/reviews', async(req, res) =>{
+            const newReview = req.body;
+            const result = await reviewCollection.insertOne(newReview);
+            res.send(result);
         });
 
         // app.get('/inventory/:id', async(req, res) =>{

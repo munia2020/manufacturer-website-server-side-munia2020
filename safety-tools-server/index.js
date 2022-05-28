@@ -148,7 +148,9 @@ async function run() {
       // res.send({ result, token });
     });
 
-    //  make admin
+
+
+    //  admin
 
     app.put("/makeAdmin", async (req, res) => {
       const filter = { email: req.body.email };

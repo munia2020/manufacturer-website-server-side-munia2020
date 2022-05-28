@@ -130,12 +130,12 @@ async function run() {
       };
       const result = await userCollection.updateOne(filter, updateDoc, options);
       // res.send(result);
-      const token = jwt.sign(
-        { email: email },
-        process.env.ACCESS_TOKEN_SECRET,
-        { expiresIn: "1h" }
-      );
-      res.send({ result, token });
+      // const token = jwt.sign(
+      //   { email: email },
+      //   process.env.ACCESS_TOKEN_SECRET,
+      //   { expiresIn: "1h" }
+      // );
+      // res.send({ result, token });
     });
 
     //  make admin
@@ -153,7 +153,7 @@ async function run() {
 
     // check admin or not
     app.get("/checkAdmin/:email", async (req, res) => {
-      const result = await usersCollection
+      const result = await userCollection
         .find({ email: req.params.email })
         .toArray();
       console.log(result);

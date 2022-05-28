@@ -161,7 +161,7 @@ async function run() {
       }
     });
 
-    // check admin or not
+    // check admin
     app.get("/checkAdmin/:email", async (req, res) => {
       const result = await userCollection
         .find({ email: req.params.email })
